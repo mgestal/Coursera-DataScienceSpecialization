@@ -13,15 +13,15 @@ This specialization covers the concepts and tools you'll need throughout the ent
 
 ### Courses
 
-1. The Data Scientist's Toolbox
+1. [The Data Scientist's Toolbox](./01_DataScientistToolbox/Readme.md)
 
-1. R Programming
+1. [R Programming](./02_R-Programming/Readme.md)
 
-1. Getting and Cleaning Data
+1. [Getting and Cleaning Data](./03_GettingCleaningData/Readme.md)
 
 1. Exploratory Data Analysis
 
-1. Reproducible Research
+1. [Reproducible Research](./05_ReproducibleResearch/Readme.md)
 
 1. Statistical Inference
 
