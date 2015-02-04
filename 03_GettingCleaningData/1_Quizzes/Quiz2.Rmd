@@ -1,0 +1,217 @@
+---
+title: "Quiz2"
+author: "mgestal"
+date: "Wednesday, January 14, 2015"
+output: html_document
+---
+
+To run successfully the Quiz, next packages should be previously installed:
+
+   - install.packages("sqldf")
+   - install.packages("httpuv")
+
+
+```{r}
+
+## Load required packages
+library("data.table")
+library("sqldf")
+
+## create directory for downloaded data
+if(!file.exists("data")) {
+  dir.create("data")
+}
+
+````
+
+### Question 1
+
+Register an application with the Github API here  https://github.com/settings/applications. 
+
+Access the API to get information on your instructors repositories (hint: this 
+is the url you want "https://api.github.com/users/jtleek/repos"). Use this data 
+to find the time that the datasharing repo was created. What time was it created? 
+
+This tutorial may be useful (https://github.com/hadley/httr/blob/master/demo/oauth2-github.r). 
+You may also need to run the code in the base R package and not R studio.
+
+
+**IMPORTANT: Execute from RConsole not from RStudio**
+
+library(httr)
+require(httpuv)
+require(jsonlite)
+
+
+1. Find OAuth settings for github:
+    http://developer.github.com/v3/oauth/
+
+oauth_endpoints("github")
+
+2. Register an application at https://github.com/settings/applications;
+    Use any URL you would like for the homepage URL (http://github.com is fine)
+    and http://localhost:1410 as the callback url
+
+    Insert your client ID and secret below - if secret is omitted, it will
+    look it up in the GITHUB_CONSUMER_SECRET environmental variable.
+myapp <- oauth_app("github", key="a200ea9915500822d8ea", secret = "51f2a63ad2d120deefe4a3e9e3dd600defc851fd")
+
+3. Get OAuth credentials
+github_token <- oauth2.0_token(oauth_endpoints("github"), myapp)
+
+4. Use API
+req <- GET("https://api.github.com/users/jtleek/repos", config(token = github_token))
+stop_for_status(req)
+output <- content(req)
+
+
+printRepo <- function(name, owner, created) {
+  msg <- sprintf("name: %25s   owner: %6s   created: %10s", name, owner, created)
+  message(msg)
+}
+
+for(n in 1:length(output)) {
+  printRepo(output[[n]]$name, output[[n]]$owner[[1]], output[[n]]$created)
+}
+
+ output: 
+
+- name:                  ballgown   owner: jtleek   created: 2013-08-28T18:18:50Z
+- name:   capitalIn21stCenturyinR   owner: jtleek   created: 2014-05-27T20:38:31Z
+- name:              dataanalysis   owner: jtleek   created: 2013-01-22T12:16:41Z
+- name:             datascientist   owner: jtleek   created: 2012-06-24T14:36:20Z
+- name:               datasharing   owner: jtleek   created: 2013-11-07T13:25:07Z
+- name:        datawomenontwitter   owner: jtleek   created: 2014-09-09T15:49:57Z
+- name:                 derfinder   owner: jtleek   created: 2013-07-20T16:05:59Z
+- name:               derfinder-1   owner: jtleek   created: 2013-11-08T18:16:27Z
+- name:                       DSM   owner: jtleek   created: 2013-08-08T13:20:40Z
+- name:               EDA-Project   owner: jtleek   created: 2013-03-12T14:46:24Z
+- name:             futureofstats   owner: jtleek   created: 2013-11-21T15:07:59Z
+- name:            genomicspapers   owner: jtleek   created: 2014-10-07T18:32:10Z
+- name:                googleCite   owner: jtleek   created: 2013-09-03T12:48:28Z
+- name:                  graduate   owner: jtleek   created: 2012-11-07T16:43:18Z
+- name:                 healthvis   owner: jtleek   created: 2012-11-12T21:35:30Z
+- name:                      hyde   owner: jtleek   created: 2014-04-25T03:59:31Z
+- name:           inclassfeb62014   owner: jtleek   created: 2014-02-06T16:13:11Z
+- name:                  jhsph753   owner: jtleek   created: 2013-01-22T03:06:39Z
+- name:              jhsph753and4   owner: jtleek   created: 2014-01-04T21:06:44Z
+- name:          jtleek.github.io   owner: jtleek   created: 2014-04-25T04:14:45Z
+- name:                      leah   owner: jtleek   created: 2014-03-05T16:11:46Z
+- name:                  leekasso   owner: jtleek   created: 2014-01-08T02:40:21Z
+- name:                   modules   owner: jtleek   created: 2013-07-12T21:09:41Z
+- name:                  MOOCtalk   owner: jtleek   created: 2014-03-13T13:53:05Z
+- name:                 polyester   owner: jtleek   created: 2014-06-06T01:57:33Z
+- name:                 portfolio   owner: jtleek   created: 2014-01-21T13:35:16Z
+- name:                 protocols   owner: jtleek   created: 2014-08-21T20:55:43Z
+- name:               rdsmGeneSig   owner: jtleek   created: 2013-08-15T13:16:01Z
+- name:                   reviews   owner: jtleek   created: 2013-10-22T23:47:38Z
+- name:                   rfitbit   owner: jtleek   created: 2013-12-30T17:43:29Z
+
+Solution: 
+  
+  printRepo(output[[4]]$name, output[[4]]$owner[[1]], output[[4]]$created)
+
+output
+
+- name:               datasharing   owner: jtleek   created: 2013-11-07T13:25:07Z
+
+
+## Question 2
+
+ The sqldf package allows for execution of SQL commands on R data frames. 
+ We will use the sqldf package to practice the queries we might send with the 
+ dbSendQuery command in RMySQL. Download the American Community Survey data and 
+ load it into an R object called acs
+
+ [https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Fss06pid.csv](https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Fss06pid.csv) 
+
+Which of the following commands will select only the data for the probability weights pwgtp1 with ages less than 50?        
+
+```{r}
+
+if (!file.exists("./data/ss06pid.csv")) {
+    fileUrl <- "https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Fss06pid.csv" 
+    destination <- file.path(getwd(), "data", "ss06pid.csv")
+    download.file(fileUrl, destination)
+} 
+
+acs <- read.csv("./data/ss06pid.csv")
+
+#query <- sqldf("select pwgtp1 from acs")                        ## NO
+#query <- sqldf("select * from acs where AGEP < 50 and pwgtp1")  ## NO
+#query <- sqldf("select * from acs where AGEP < 50")             ## NO
+query <- sqldf("select pwgtp1 from acs where AGEP < 50")
+
+```
+
+##  Question 3
+
+ Using the same data frame you created in the previous problem, what is the 
+ equivalent function to unique(acs$AGEP)
+
+```{r}
+unique(acs$AGEP)
+query1 <- sqldf("select distinct AGEP from acs")
+# > query2 <- sqldf("select AGEP where unique from acs")   ## NO
+# > query3 <- sqldf("select unique * from acs")            ## NO
+# > query4 <- sqldf("select unique AGEP from acs")  
+
+# query4: Error in sqliteSendQuery(con, statement, bind.data) : 
+#  error in statement: near "unique": syntax error
+identical(query1$AGEP, unique(acs$AGEP))
+
+```
+
+## Question 4
+
+ How many characters are in the 10th, 20th, 30th and 100th lines of HTML 
+ from this page: 
+  
+ [http://biostat.jhsph.edu/~jleek/contact.html](http://biostat.jhsph.edu/~jleek/contact.html) 
+
+```{r}
+
+connection <- url("http://biostat.jhsph.edu/~jleek/contact.html")
+htmlCode <- readLines(connection)
+close(connection)
+
+# htmlCode contais one html line per element index
+nchar(htmlCode[c(10,20,30,100)])
+
+```
+
+##  Question 5
+
+
+Read this data set into R and report the sum of the numbers in the fourth column.
+
+[https://d396qusza40orc.cloudfront.net/getdata%2Fwksst8110.for](https://d396qusza40orc.cloudfront.net/getdata%2Fwksst8110.for)
+
+Original source of the data: [http://www.cpc.ncep.noaa.gov/data/indices/wksst8110.for](http://www.cpc.ncep.noaa.gov/data/indices/wksst8110.for)
+(Hint this is a fixed width file format)
+
+**Note:** downloading and reading from url, gives me an error in Rmd file. That commands are replaces with calls that use the local data file
+
+```{r}
+
+url <- "https://d396qusza40orc.cloudfront.net/getdata%2Fwksst8110.for"
+
+if (!file.exists("./data/Fwksst8110.for")) {
+  download.file(url, "./data/Fwksst8110.for")
+}
+
+rawData <- read.csv("./data/Fwksst8110.for", header = TRUE)
+
+#lines <- readLines(url, n = 10)
+lines <- readLines(file("./data//Fwksst8110.for", open="r") , n = 10)
+
+
+w <- c(-1,9,-5,4,4,-5,4,4,-5,4,4,-5,4,4)
+colNames <- c("week", "sstNino12", "sstaNino12", "sstNino3", "sstaNino3", "sstNino34", 
+              "sstaNino34", "sstNino4", "sstaNino4")
+#d <- read.fwf(url, w, header = FALSE, skip = 4, col.names = colNames)
+d <- read.fwf("./data/Fwksst8110.for", w, header = FALSE, skip = 4, col.names = colNames)
+
+sum(d[, 4])
+
+```
