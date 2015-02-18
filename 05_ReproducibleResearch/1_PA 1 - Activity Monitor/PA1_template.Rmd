@@ -1,9 +1,4 @@
-?---
-title: 'PA 1: Activity Monitoring'
-author: "mgestal"
-date: "Saturday, January 10, 2015"
-output: html_document
----
+
 
 ### Data
 
@@ -90,6 +85,7 @@ hist(dailySteps$steps, freq = TRUE, col="#819FF7", border="black",
      main = "Histogram of the total number of steps per day", 
      axes = TRUE, labels = TRUE,
      breaks = 10, xlim = c(0, 25000), ylim=c(0, 25))
+
 
 ```
 
