@@ -19,7 +19,7 @@ This specialization covers the concepts and tools you'll need throughout the ent
 
 1. [Getting and Cleaning Data](./03_GettingCleaningData/Readme.md)
 
-1. Exploratory Data Analysis
+1. [Exploratory Data Analysis](./04_ExploratoryDataAnalysis/Readme.md)
 
 1. [Reproducible Research](./05_ReproducibleResearch/Readme.md)
 
