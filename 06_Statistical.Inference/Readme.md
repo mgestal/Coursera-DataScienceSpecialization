@@ -16,9 +16,38 @@ Statistical inference is the process of drawing conclusions about populations or
 
 In this class students will learn the fundamentals of statistical inference. Students will receive a broad overview of the goals, assumptions and modes of performing statistical inference. Students will be able to perform inferential tasks in highly targeted settings and will be able to use  the skills developed as a roadmap for more complex inferential challenges.
 
+The course is taught via 13 lectures
+
+Week 1
+
+1. Introduction
+2. Probability
+3. Conditional Probability
+4. Expectations
+
+Week 2
+
+5. Variance
+6. Common Distributions
+7. Asymptotics
+
+Well 3
+
+8. T confidence intervals
+9. Hypothesis testing
+10. P-values
+
+Week 4
+
+11. Power
+12. Multiple Testing
+13. Resampling
+
 ### Suggested Readings
 
 There's a LeanPub book for the course here: https://leanpub.com/LittleInferenceBook 
 that can be read for free here https://leanpub.com/LittleInferenceBook/read
+
+In addition, the book is on github if you want to render it yourself using pandoc https://github.com/bcaffo/LittleInferenceBook
 
 (C) Marcos Gestal. March, 2015. All Rights reserved.
