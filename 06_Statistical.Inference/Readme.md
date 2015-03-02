@@ -1,9 +1,9 @@
 
-## Coursera: Reproducible Research
+## Coursera: Statistical Inference
 
-Programming Assignments of Coursera online course: Reproducible Research
+Programming Assignments of Coursera online course: Statistical Inference
  
-https://class.coursera.org/repdata-010/
+https://class.coursera.org/statinference-012
 
 by Roger D. Peng, PhD, Jeff Leek, PhD, Brian Caffo, PhD
 Johns Hopkins. Bloomberg School of Public Health
