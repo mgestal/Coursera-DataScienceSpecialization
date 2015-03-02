@@ -23,7 +23,7 @@ This specialization covers the concepts and tools you'll need throughout the ent
 
 1. [Reproducible Research](./05_ReproducibleResearch/)
 
-1. Statistical Inference
+1. [Statistical Inference](./06_Statistical.Inference)
 
 1. Regression Models
 
