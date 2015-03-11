@@ -13,13 +13,8 @@ output: pdf_document
 
 This project investigates the exponential distribution in R and compare it with the Central Limit Theorem. 
 
-The exponential distribution can be simulated in R with `rexp(n, lambda)` where lambda is the rate parameter. The mean of exponential distribution is 1/lambda and the standard deviation is also 1/lambda. Set ***lambda = 0.2*** for all of the simulations. The project will investigate the distribution of averages of 40 exponentials, so thousand simulations will be needed.
+The exponential distribution can be simulated in R with `rexp(n, lambda)` where lambda is the rate parameter. The mean of exponential distribution is 1/lambda and the standard deviation is also 1/lambda. Set ***lambda = 0.2*** for all of the simulations. The project will investigate the distribution of averages of 40 exponentials and illustrates via simulation and associated explanatory text the properties of the distribution of the mean of 40 exponentials. 
 
-Illustrate via simulation and associated explanatory text the properties of the distribution of the mean of 40 exponentials. The project should:
-
-1. Show the sample mean and compare it to the theoretical mean of the distribution.
-1. Show how variable the sample is (via variance) and compare it to the theoretical variance of the distribution.
-1. Show that the distribution is approximately normal.
 
 ## Simulations
 
@@ -29,7 +24,7 @@ dimensions (nSimulations x nDistributions), so each row correspond with an indiv
 ```{r}
 
 nDistributions <- 40;
-nSimulations <- 20000;
+nSimulations <- 5000;
 lambda <- 0.2;
 
 set.seed(1234)
@@ -42,12 +37,14 @@ simulationMatrix <- matrix(simulationValues, nSimulations, nDistributions)
 
 ### Sample vs. theoretical mean of the distribution.
 
+The theoretical mean is $$ \mu = \frac{1}{lambda} $$ and the sample mean is a random variable that should be centered
+around the same value.
 
 ```{r}
-
 theoreticalMean <- 1/lambda
 
-# Simulation mean: each position is the mean of nDistribution values
+# Simulation mean: each position is the mean of nDistribution random values 
+#                  (from an exponential distribution)
 #    dimensions: vector of nSimulatinons length
 simulationMean <- rowMeans(simulationMatrix);  
                                                
@@ -57,12 +54,12 @@ sampleMean <- mean(simulationMean)
 
 ```{r echo=FALSE}
 
-sprintf("Sample mean: %f", sampleMean)
 sprintf("Theoretical mean: %f", theoreticalMean)
+sprintf("Sample mean: %f", sampleMean)
 
 ```
 
-```{r echo=FALSE}
+```{r echo=FALSE, fig.height=4}
 
 library(ggplot2)
 
@@ -83,7 +80,7 @@ g <- g + xlab(paste("Sample means for", nSimulations, "simulations"))
 g
 
 ```
-As shown by the mean values and the previous graph the sample mean is very close to the theoretical mean. The values will be closer if we increase the number of simulations.
+As shown by the mean values and the previous graph the sample mean is very close to the theoretical mean. The values will be closer if we increase the number of simulations. Note how the sample mean is a random variable with a normal distribution around the population mean.
 
 
 ### Sample vs. theoretical variance of the distribution
@@ -107,7 +104,7 @@ sprintf("Theoretical variance: %f", theoreticalVariance)
 
 ```
 
-As in the previous point, the sample variance and the population variance are very similar.
+As in the previous point, the sample variance and the population variance are very similar. Note as if we increase the number of distributions, we would reduce the variance of the distribution of averages.
 
 
 ### Comparing the distribution with a normal
@@ -119,7 +116,7 @@ To check if a distribution is similar to a normal distribution, Q-Q plot can be 
 each point represent the sample values vs the theoretical value, so if the distribution is normal all the points
 should be located over a 45 degrees line.
 
-```{r}
+```{r, fig.height=4}
 
 qqnorm(simulationMean, col="red")
 qqline(simulationMean)
@@ -168,7 +165,7 @@ g <- g + xlab(paste("Sample means for", nSimulations, "simulations"))
 ## Appendix 2 - Exponential Distribution
 
 
-```{r echo=FALSE}
+```{r fig.height=4, echo=FALSE}
 
 hist(rexp(nSimulations), 
      main = "exponential distribution",
