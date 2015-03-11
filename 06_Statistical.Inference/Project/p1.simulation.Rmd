@@ -109,21 +109,22 @@ As in the previous point, the sample variance and the population variance are ve
 
 ### Comparing the distribution with a normal
 
-At this point should be noted that the previous figure with the distribution of average is very similar to a Gaussian distribution (it is the distribution of the mean of 40 exponentials), compared with the distribution of an individual exponential distribution (see Appendix 2)
+We can argue several facts that evidence that distribution of averages is close to a normal or gaussian distribution:
 
+Firstly it should be noted how the previous figure with the distribution of averages is very similar to a Gaussian distribution. In that figure, the histogram shows the sample distribution of the mean of 40 exponentials and overlaps the distribution function of the samples. You can see as it is very different from the distribution of an individual exponential distribution (see Appendix 2).
 
-To check if a distribution is similar to a normal distribution, Q-Q plot can be used. In this kind of plot, 
-each point represent the sample values vs the theoretical value, so if the distribution is normal all the points
-should be located over a 45 degrees line.
+Another fact that points to the normality of the distribution is related with the percentiles. In a normal distribution 68%, 95% and 99% of the density lies within the 1, 2 and 3 standad deviations from the mean. In our distribution this theoretical values will correspond with:
 
-```{r, fig.height=4}
+```{r}
+theoreticalMean + c(1, 2, 3)*theoreticalVariance
+```
+If we obtain this percentiles from the sample, it should be very similar to the previous ones, as we can check as follow
 
-qqnorm(simulationMean, col="red")
-qqline(simulationMean)
-
+```{r}
+quantile(simulationMean, c(0.68, 0.95, 0.99))
 ```
 
-Following the previous graph, we can conclude that the distribution of averages of 40 exponentials is close to a normal distribution.
+But the best way to check if a distribution is similar to a normal distribution is using a Quantile-Quantile plot. In this kind of plot, each point represent the sample value vs the theoretical value, so if the distribution is normal all the points should be located over a 45 degrees line. Following the generated graph in Appendix 3, we can conclude that the distribution of averages of 40 exponentials is very close to a normal distribution.
 
 
 ### Conclusion
@@ -131,6 +132,8 @@ Following the previous graph, we can conclude that the distribution of averages 
 In probability theory, the Central Limit Theorem states that, given certain conditions, the arithmetic mean of a sufficiently large number of iterates of independent random variables, each with a well-defined expected value and well-defined variance, will be approximately normally distributed, regardless of the underlying distribution (an exponential distribution in this experiment)
 
 The performed simulation confirms this hypothesis because the distribution of the mean of 40 exponentials is really close to a normal distribution.
+
+\newpage
 
 
 ## Appendix 1 - R code for figure 1
@@ -174,5 +177,12 @@ hist(rexp(nSimulations),
 
 ```
 
+## Appendix 3 - Normal Quantile-Quantile Plot
 
+```{r, fig.height=4}
+
+qqnorm(simulationMean, col="red")
+qqline(simulationMean)
+
+```
 
