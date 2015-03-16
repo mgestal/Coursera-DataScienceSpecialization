@@ -1,0 +1,146 @@
+---
+output: html_document
+---
+#Statistical Inference: Inference project
+### (c) Marcos Gestal. March 2015.
+
+----
+
+## Overview
+
+This second part of the project will analyze the ToothGrowth data in the R datasets package and provide some clonclusions about the growth by supp and dose.
+
+## Analysis
+
+### Load data and basic exploratory data analyses
+
+
+ToothBrowth data represents the length of odontoblasts (teeth) in each of 10 guinea pigs at each of three dose levels of Vitamin C (0.5, 1, and 2 mg) with each of two delivery methods (orange juice or ascorbic acid).
+
+```{r}
+
+data(ToothGrowth)   # loading data
+str(ToothGrowth)
+
+```
+See appendix 1 for a graphical view of the data with supplement and dose influeces.
+
+
+### Provide a basic summary of the data
+
+
+```{r}
+summary(ToothGrowth)
+aggregate(data = ToothGrowth, len ~ supp * dose , mean)
+table(ToothGrowth$dose, ToothGrowth$supp)
+
+```
+
+The two supplement methods (with 3 different doses) are applied to the 10 pigs, so the next tests will use a paired approximation when it will be required.
+
+Appendix 2 shows a boxplot of the data where the mean and variance per dose and per supplement can be graphically checked. As the boxplot shows, the lenght increases as the dose also increases from 0,5 to 2mg. The influence of the delivery methods (Oranje Juice; Ascorbid Acid) is not so clear in this graph but it seems that Orange Juice has a better performance, so some tests will be required.
+
+## Statistical Inference
+
+
+### Influence of the Supplement type over the length increase
+
+Firstly, we will compare the influence of the supplement type without taking into account the dose.
+
+```{r}
+
+suppOJ <- ToothGrowth[which(ToothGrowth$supp=="OJ"), ]
+suppVC <- ToothGrowth[which(ToothGrowth$supp=="VC"), ]  
+
+```
+
+Appendix 3 shows the Confidence Interval obtained with the Wald method and with a one sample test for the median of the difference of length by the supplement used. However, the number of samples is small so T Test will be prefered. As we said earlier, supplements are applied to the same population of guinean pigs so a paired test with grouped data should be used. In this test, the Null Hypothesis will be that "There are NO differences between the effect of delivery method (orange juice or ascorbic acid)".
+
+```{r}
+t.test(suppVC$len, suppOJ$len, paired = T)
+```
+Since the p-value is 0.00255 (p-value <  0.05) null hypothesis can be reject, so we accept that *there are differences due to delivery method*. Furthermore, the estimated mean is -3.7, so another time the best supplement seems to be the Orange Juice.
+
+### Influence of the Supplement type over the length increase (by dose)
+
+Once we stated that there is a significant different between the supplements, we will test the influence of the supplement type depending on the dose value
+
+```{r}
+
+dose05_suppOJ <- suppOJ[(suppOJ$dose==0.5), ]
+dose05_suppVC <- suppVC[(suppVC$dose==0.5), ]
+
+t.test(dose05_suppVC$len, dose05_suppOJ$len, paired = T)    
+
+dose1_suppOJ <- suppOJ[(suppOJ$dose==1), ]
+dose1_suppVC <- suppVC[(suppVC$dose==1), ]
+
+t.test(dose1_suppVC$len, dose1_suppOJ$len, paired = T)   
+
+dose2_suppOJ <- suppOJ[(suppOJ$dose==2), ]
+dose2_suppVC <- suppVC[(suppVC$dose==2), ]
+
+t.test(dose2_suppVC$len, dose2_suppOJ$len, paired = T)   
+
+```
+
+According with p_values the two supplement methods are different with a 0.5mg and 1mg doses (best performance for Orange Juice) and equal with 2mg doses 
+
+
+## Conclusion
+
+Confidence interval and hypothesis testing was performed (confidence interval for normal distribution was showed with educational and comparision purposes). The ToothGrowth dataset was 10 individuals. Each one of that pigs were used to test the different supplement types and the different doses for each one, so paired tests (dependent groups) were used (results are very similar without this assumption).
+
+From these test, the following clonclusions can be extrated:
+
+* The boxplot and scatterplot show how a increase of the dose implies an increase of the length for both supplements
+* There are statistically significant differences between the type of supplement 
+* According Confidence Intervals, for 0.5mg and 1mg doses the best supplement is the Orange Juice. For 2mg doses, both methods achieve very similar results.
+
+\newpage
+
+
+## Appendix 1 : ToothGrowth data
+
+
+```{r echo=FALSE, fig.height=4}
+
+require(graphics)
+coplot(len ~ dose | supp, data = ToothGrowth, panel = panel.smooth, show.given=FALSE,
+        xlab = "ToothGrowth data: length vs dose, given type of supplement (OJ & VC)")
+
+```
+
+## Appendix 2 : Boxplot 
+
+
+```{r echo=FALSE, fig.align='center', fig.height=3.5}
+
+par(mfrow=c(1,2))
+
+boxplot(len ~ dose, data=ToothGrowth, col=terrain.colors(3),
+        ylab="Tooth Length", xlab="Dose", main="Boxplot of Tooth Growth Data")
+
+boxplot(len ~ supp, data=ToothGrowth, col=terrain.colors(2),
+        ylab="Tooth Length", xlab="Supplement", main="Boxplot of Tooth Growth Data")               
+
+```
+
+## Appendix 3 : Walden approach to confidence interval for the mean of length   
+
+The variable difLength contains the differences in toothgrowth related with the supplement (a positive value means that VC/Ascorbic Acid offers a higher increase than Orange Juice)
+
+```{r}
+difLength <- suppVC$len - suppOJ$len
+mean(difLength)
+mean(difLength)+c(-1,1)*qnorm(.975)*sd(difLength)/sqrt(length(difLength))  
+
+```
+
+We can compare it with t test... and check how, as it is expected the average is equal, and the confidence interval is a little bit small in this case. Also, you can check how this test over difLength values is exactly equal to the paired test previously showed in the text.
+
+```{r}
+t.test(difLength)           
+```
+
+In both cases, the tests appoint that this difference between means should be negative, so Orange Juice should be considered as the best supplement
