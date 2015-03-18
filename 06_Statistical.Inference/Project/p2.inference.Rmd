@@ -1,6 +1,13 @@
 ---
-output: html_document
+title: 'Statistical Inference: inference'
+output:
+  pdf_document:
+    toc: yes
+  html_document:
+    theme: united
+    toc: yes
 ---
+
 #Statistical Inference: Inference project
 ### (c) Marcos Gestal. March 2015.
 

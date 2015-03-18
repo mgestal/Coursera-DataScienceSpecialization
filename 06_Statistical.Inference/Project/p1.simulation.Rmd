@@ -1,3 +1,12 @@
+---
+title: 'Statistical Inference: simulation'
+output:
+  html_document:
+    theme: united
+    toc: yes
+  pdf_document:
+    toc: yes
+---
 
 #Statistical Inference: Simulation project
 ### (c) Marcos Gestal. March 2015.
@@ -124,7 +133,7 @@ quantile(simulationMean, c(0.68, 0.95, 0.99))
 But the best way to check if a distribution is similar to a normal distribution is using a Quantile-Quantile plot. In this kind of plot, each point represent the sample value vs the theoretical value, so if the distribution is normal all the points should be located over a 45 degrees line. Following the generated graph in Appendix 3, we can conclude that the distribution of averages of 40 exponentials is very close to a normal distribution.
 
 
-### Conclusion
+## Conclusion
 
 In probability theory, the Central Limit Theorem states that, given certain conditions, the arithmetic mean of a sufficiently large number of iterates of independent random variables, each with a well-defined expected value and well-defined variance, will be approximately normally distributed, regardless of the underlying distribution (an exponential distribution in this experiment)
 
