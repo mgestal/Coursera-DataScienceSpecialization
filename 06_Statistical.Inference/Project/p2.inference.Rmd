@@ -1,10 +1,11 @@
 ---
 title: 'Statistical Inference: inference'
 output:
-  pdf_document:
-    toc: yes
   html_document:
+    keep_md: yes
     theme: united
+    toc: yes
+  pdf_document:
     toc: yes
 ---
 
