@@ -1,6 +1,4 @@
----
-output: html_document
----
+
 #Statistical Inference: Simulation project
 ### (c) Marcos Gestal. March 2015.
 
