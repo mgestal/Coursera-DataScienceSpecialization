@@ -1,4 +1,4 @@
-# Statistical Inference: Quiz 1
+# Statistical Inference: Quiz 2
 Marcos Gestal  
 
 

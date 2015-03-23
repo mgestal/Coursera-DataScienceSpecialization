@@ -1,5 +1,5 @@
 ---
-title: 'Statistical Inference: Quiz 1'
+title: 'Statistical Inference: Quiz 2'
 author: "Marcos Gestal"
 output:
   html_document:
