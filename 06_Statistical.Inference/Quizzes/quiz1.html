@@ -62,14 +62,8 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <h3>Question 1</h3>
 <p>Consider influenza epidemics for two parent heterosexual families. Suppose that the probability is 17% that at least one of the parents has contracted the disease. The probability that the father has contracted influenza is 12% while the probability that both the mother and father have contracted the disease is 6%. What is the probability that the mother has contracted influenza?</p>
 <p><em>(Hints look at lecture 2 around 5:30 and homework question on page 3/10).</em></p>
-<ul>
-<li>17%</li>
-<li>5%</li>
-<li>6%</li>
-<li><strong>11%</strong></li>
-</ul>
-<div id="explanation" class="section level4">
-<h4>Explanation</h4>
+<div id="solution" class="section level4">
+<h4>Solution</h4>
 <p>A=Mother B = Father</p>
 <p><span class="math">\(P(A\cup B))=17%, P(B)=12%,  P(A \cap B))=6%.\)</span></p>
 <p>We know <span class="math">\(P(A\cup B) = P(A) + P(B) - P(A \cap B)\)</span> , so we get 17% = P(A) + 12% - 6%</p>
@@ -79,14 +73,8 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <h3>Question 2</h3>
 <p>A random variable, X is uniform, a box from 0 to 1 of height 1. (So that its density is f(x)=1 for <span class="math">\(0\leq x \leq 1\)</span>.) What is its 75th percentile?</p>
 <p><em>(Hints, look at lecture 2 around 21:30 and homework 1 page 4/10. Also, look up the help function for the qunif command in R.)</em></p>
-<ul>
-<li>0.25%</li>
-<li>0.5%</li>
-<li><strong>0.75%</strong></li>
-<li>0.10%</li>
-</ul>
-<div id="explanation-1" class="section level4">
-<h4>Explanation</h4>
+<div id="solution-1" class="section level4">
+<h4>Solution</h4>
 <p>This density looks like a box with height=1. The point so that the area below it is 0.75 is 0.75</p>
 <pre class="r"><code>qunif(0.75)</code></pre>
 <pre><code>## [1] 0.75</code></pre>
@@ -96,14 +84,9 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <h3>Question 3</h3>
 <p>You are playing a game with a friend where you flip a coin and if it comes up heads you give her X dollars and if it comes up tails she gives you Y dollars. The probability that the coin is heads is p (some number between 0 and 1.) What has to be true about X and Y to make so that both of your expected total earnings is 0. The game would then be called <em>fair</em></p>
 <p><em>(Hints, look at Lecture 4 from 0 to 6:50 and Homework 1 page 5/10. Also, for further reading on fair games and gambling, start with the Dutch Book problem ).</em></p>
-<ul>
-<li><strong><span class="math">\(\frac{p}{1-p} = \frac{Y}{X}\)</span></strong> [*]</li>
-<li><span class="math">\(\frac{p}{1-p} = \frac{X}{Y}\)</span></li>
-<li>X = Y</li>
-<li><span class="math">\(p = \frac{X}{Y}\)</span></li>
-</ul>
-<div id="explanation-2" class="section level4">
-<h4>Explanation</h4>
+<div id="solution-2" class="section level4">
+<h4>Solution</h4>
+<p><span class="math">\(\frac{p}{1-p} = \frac{Y}{X}\)</span></p>
 <p>Your expected earnings is -pX + (1-p)Y = 0</p>
 <p>Then it must be the case that p1-p = YX Or that the ratio of the payouts has to equal the odds. So consider, for example, if p1-p = 2. The game is 2 to 1 against you, p=2/3; she is twice as likely to win as you. Then she will have to pay out twice as much if you win to make the game fair.</p>
 </div>
@@ -118,7 +101,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <li>The median must be 1</li>
 <li>We can’t conclude anything about the median.</li>
 </ul>
-<div id="explanation-3" class="section level4">
+<div id="explanation" class="section level4">
 <h4>Explanation</h4>
 <p>The median must be 0 since 50 percent of the mass is below 0 and 50% is above</p>
 </div>
@@ -136,14 +119,8 @@ temp</code></pre>
 ## Prob  0.1  0.2  0.3  0.4</code></pre>
 <p>What is the mean?</p>
 <p><em>(Hint, watch Lecture 4 on expectations of PMFs and look at Homework 1 problem on page 10/10 for a similar problem calculating the variance.)</em></p>
-<ul>
-<li><strong>3</strong></li>
-<li>1</li>
-<li>2</li>
-<li>4</li>
-</ul>
-<div id="explanation-4" class="section level4">
-<h4>Explanation</h4>
+<div id="solution-3" class="section level4">
+<h4>Solution</h4>
 <pre class="r"><code>sum(x * p)</code></pre>
 <pre><code>## [1] 3</code></pre>
 </div>
@@ -152,14 +129,8 @@ temp</code></pre>
 <h3>Question 6</h3>
 <p>A web site (www.medicine.ox.ac.uk/bandolier/band64/b64-7.html) for home pregnancy tests cites the following: “When the subjects using the test were women who collected and tested their own samples, the overall sensitivity was 75%. Specificity was also low, in the range 52% to 75%.” Assume the lower value for the specificity. Suppose a subject has a positive test and that 30% of women taking pregnancy tests are actually pregnant. What number is closest to the probability of pregnancy given the positive test?</p>
 <p><em>(Hints, watch Lecture 3 at around 7 minutes for a similar example. Also, there’s a lot of Bayes’ rule problems and descriptions out there, for example here’s one for HIV testing. Note, discussions of Bayes’ rule can get pretty heady. So if it’s new to you, stick to basic treatments of the problem. Also see Homework 2 question on page 5/12.)</em></p>
-<ul>
-<li>20%</li>
-<li>30%</li>
-<li><em>40%</em></li>
-<li>50%</li>
-</ul>
-<div id="explanation-5" class="section level4">
-<h4>Explanation</h4>
+<div id="solution-4" class="section level4">
+<h4>Solution</h4>
 <p>The median must be 0 since 50 percent of the mass is below 0 and 50% is above</p>
 <p><span class="math">\(P(Preg|+) = \frac{P(+|Preg)·P(Preg)}{P(+|Preg)·P(Preg) + P(+|Preg^{c})·P(Preg^{c})}\)</span> = <span class="math">\(\frac{.75 x .30}{.75 x .30 + (1-.52)x(1-.3)} \approx 0.40 \)</span></p>
 </div>

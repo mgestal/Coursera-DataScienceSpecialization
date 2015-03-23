@@ -10,12 +10,7 @@ Consider influenza epidemics for two parent heterosexual families. Suppose that 
 
 *(Hints look at lecture 2 around 5:30 and homework question on page 3/10).*
 
-- 17%
-- 5%
-- 6%
-- **11%**
-
-#### Explanation
+#### Solution
 
 A=Mother
 B = Father
@@ -31,12 +26,7 @@ A random variable, X is uniform, a box from 0 to 1 of height 1. (So that its den
 
 *(Hints, look at lecture 2 around 21:30 and homework 1 page 4/10. Also, look up the help function for the qunif command in R.)*
 
-- 0.25%
-- 0.5%
-- **0.75%**
-- 0.10%
-
-#### Explanation
+#### Solution
 
 This density looks like a box with height=1. The point so that the area below it is 0.75 is 0.75
 
@@ -56,12 +46,9 @@ You are playing a game with a friend where you flip a coin and if it comes up he
 
 *(Hints, look at Lecture 4 from 0 to 6:50 and Homework 1 page 5/10. Also, for further reading on fair games and gambling, start with the Dutch Book problem ).*
 
-- **$\frac{p}{1-p} = \frac{Y}{X}$** [*]
-- $\frac{p}{1-p} = \frac{X}{Y}$
-- X = Y
-- $p = \frac{X}{Y}$
+#### Solution
 
-#### Explanation
+$\frac{p}{1-p} = \frac{Y}{X}$
 
 Your expected earnings is -pX + (1-p)Y = 0
 
@@ -107,12 +94,7 @@ What is the mean?
 
 *(Hint, watch Lecture 4 on expectations of PMFs and look at Homework 1 problem on page 10/10 for a similar problem calculating the variance.)*
 
-- **3**
-- 1
-- 2
-- 4
-
-#### Explanation
+#### Solution
 
 
 ```r
@@ -130,15 +112,9 @@ sum(x * p)
 A web site (www.medicine.ox.ac.uk/bandolier/band64/b64-7.html) for home pregnancy tests cites the following: "When the subjects using the test were women who collected and tested their own samples, the overall sensitivity was 75%. Specificity was also low, in the range 52% to 75%." Assume the lower value for the specificity. Suppose a subject has a positive test and that 30% of women taking pregnancy tests are actually pregnant. What number is closest to the probability of pregnancy given the positive test?
 
 
-
 *(Hints, watch Lecture 3 at around 7 minutes for a similar example. Also, there's a lot of Bayes' rule problems and descriptions out there, for example here's one for HIV testing. Note, discussions of Bayes' rule can get pretty heady. So if it's new to you, stick to basic treatments of the problem. Also see Homework 2 question on page 5/12.)*
 
-- 20%
-- 30%
-- *40%*
-- 50%
-
-#### Explanation
+#### Solution
 
 The median must be 0 since 50 percent of the mass is below 0 and 50% is above
 

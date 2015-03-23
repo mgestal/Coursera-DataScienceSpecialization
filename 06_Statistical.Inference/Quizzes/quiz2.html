@@ -70,17 +70,13 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <div id="explanation" class="section level4">
 <h4>Explanation</h4>
 <p><span class="math">\(Var(\overline{X}) = \frac{\sigma^2}{n}\)</span></p>
-<p>2</p>
-<p>Suppose that diastolic blood pressures (DBPs) for men aged 35-44 are normally distributed with a mean of 80 (mm Hg) and a standard deviation of 10. About what is the probability that a random 35-44 year old has a DBP less than 70?</p>
-<ul>
-<li><strong>16%</strong></li>
-<li>8%</li>
-<li>22%</li>
-<li>32%</li>
-</ul>
 </div>
-<div id="explanation-1" class="section level4">
-<h4>Explanation</h4>
+</div>
+<div id="question-2" class="section level3">
+<h3>Question 2</h3>
+<p>Suppose that diastolic blood pressures (DBPs) for men aged 35-44 are normally distributed with a mean of 80 (mm Hg) and a standard deviation of 10. About what is the probability that a random 35-44 year old has a DBP less than 70?</p>
+<div id="solution" class="section level4">
+<h4>Solution</h4>
 <pre class="r"><code>pnorm(70, mean=80, sd=10)</code></pre>
 <pre><code>## [1] 0.1586553</code></pre>
 </div>
@@ -88,85 +84,54 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <div id="question-3" class="section level3">
 <h3>Question 3</h3>
 <p>Brain volume for adult women is normally distributed with a mean of about 1,100 cc for women with a standard deviation of 75 cc. What brain volume represents the 95th percentile?</p>
-<ul>
-<li>approximately 1247</li>
-<li>approximately 1175</li>
-<li><strong>approximately 1223</strong></li>
-<li>approximately 977</li>
-</ul>
-<div id="explanation-2" class="section level4">
-<h4>Explanation</h4>
+<div id="solution-1" class="section level4">
+<h4>Solution</h4>
 <pre class="r"><code>qnorm(0.95, mean = 1100, sd = 75)</code></pre>
 <pre><code>## [1] 1223.364</code></pre>
 </div>
-<div id="question-4" class="section level4">
-<h4>Question 4</h4>
-<p>Refer to the previous question. Brain volume for adult women is about 1,100 cc for women with a standard deviation of 75 cc. Consider the sample mean of 100 random adult women from this population. What is the 95th percentile of the distribution of that sample mean?</p>
-<ul>
-<li><strong>approximately 1112 cc</strong><br /></li>
-<li>approximately 1088 cc<br /></li>
-<li>approximately 1110 cc<br /></li>
-<li>approximately 1115 cc</li>
-</ul>
 </div>
-<div id="explanation-3" class="section level4">
-<h4>Explanation</h4>
+<div id="question-4" class="section level3">
+<h3>Question 4</h3>
+<p>Refer to the previous question. Brain volume for adult women is about 1,100 cc for women with a standard deviation of 75 cc. Consider the sample mean of 100 random adult women from this population. What is the 95th percentile of the distribution of that sample mean?</p>
+<div id="solution-2" class="section level4">
+<h4>Solution</h4>
 <pre class="r"><code>qnorm(0.95, mean = 1100, sd = 75/sqrt(100))</code></pre>
 <pre><code>## [1] 1112.336</code></pre>
 </div>
-<div id="question-5" class="section level4">
-<h4>Question 5</h4>
-<p>You flip a fair coin 5 times, about what’s the probability of getting 4 or 5 heads?</p>
-<p>-12%<br />-6%<br />-<strong>19%</strong><br />-3%</p>
 </div>
-<div id="explanation-4" class="section level4">
-<h4>Explanation</h4>
+<div id="question-5" class="section level3">
+<h3>Question 5</h3>
+<p>You flip a fair coin 5 times, about what’s the probability of getting 4 or 5 heads?</p>
+<div id="solution-3" class="section level4">
+<h4>Solution</h4>
 <p><span class="math">\(\bigl(\begin{smallmatrix} 5 \\ 4 \end{smallmatrix}\bigr) 2^{-5} + \bigl(\begin{smallmatrix} 5 \\ 5 \end{smallmatrix}\bigr) 2^{-5} \approx 19%\)</span></p>
 <pre class="r"><code>pbinom(3, size = 5, prob = 0.5, lower.tail = FALSE)</code></pre>
 <pre><code>## [1] 0.1875</code></pre>
 </div>
-<div id="question-6" class="section level4">
-<h4>Question 6</h4>
-<p>The respiratory disturbance index (RDI), a measure of sleep disturbance, for a specific population has a mean of 15 (sleep events per hour) and a standard deviation of 10. They are not normally distributed. Give your best estimate of the probability that a sample mean RDI of 100 people is between 14 and 16 events per hour?</p>
-<ul>
-<li>34%<br /></li>
-<li><strong>68%</strong></li>
-<li>47.5%<br /></li>
-<li>95%</li>
-</ul>
 </div>
-<div id="explanation-5" class="section level4">
-<h4>Explanation</h4>
+<div id="question-6" class="section level3">
+<h3>Question 6</h3>
+<p>The respiratory disturbance index (RDI), a measure of sleep disturbance, for a specific population has a mean of 15 (sleep events per hour) and a standard deviation of 10. They are not normally distributed. Give your best estimate of the probability that a sample mean RDI of 100 people is between 14 and 16 events per hour?</p>
+<div id="solution-4" class="section level4">
+<h4>Solution</h4>
 <p>The standard error of the mean is <span class="math">\(^{10}/_\sqrt{100}=1\)</span>. Thus between 14 and 16 is with one standard deviation of the mean of the distribution of the sample mean. Thus it should be about 68%.</p>
 <pre class="r"><code>pnorm(16, mean = 15, sd = 1) - pnorm(14, mean = 15, sd = 1)</code></pre>
 <pre><code>## [1] 0.6826895</code></pre>
 </div>
-<div id="question-7" class="section level4">
-<h4>Question 7</h4>
-<p>Consider a standard uniform density. The mean for this density is .5 and the variance is 1/12. You sample 1,000 observations from this distribution and take the sample mean, what value would you expect it to be near?</p>
-<ul>
-<li><strong>0.5 </strong></li>
-<li>0.10<br /></li>
-<li>0.25<br /></li>
-<li>0.75</li>
-</ul>
 </div>
-<div id="explanation-6" class="section level4">
-<h4>Explanation</h4>
+<div id="question-7" class="section level3">
+<h3>Question 7</h3>
+<p>Consider a standard uniform density. The mean for this density is .5 and the variance is 1/12. You sample 1,000 observations from this distribution and take the sample mean, what value would you expect it to be near?</p>
+<div id="solution-5" class="section level4">
+<h4>Solution</h4>
 <p>Via the Law of Large Numbers it should be near .5</p>
 </div>
-<div id="question-8" class="section level4">
-<h4>Question 8</h4>
-<p>The number of people showing up at a bus stop is assumed to be Poisson with a mean of 5 people per hour. You watch the bus stop for 3 hours. About what’s the probability of viewing 10 or fewer people?</p>
-<ul>
-<li>0.03<br /></li>
-<li><strong>0.12 </strong></li>
-<li>0.06<br /></li>
-<li>0.08</li>
-</ul>
 </div>
-<div id="explanation-7" class="section level4">
-<h4>Explanation</h4>
+<div id="question-8" class="section level3">
+<h3>Question 8</h3>
+<p>The number of people showing up at a bus stop is assumed to be Poisson with a mean of 5 people per hour. You watch the bus stop for 3 hours. About what’s the probability of viewing 10 or fewer people?</p>
+<div id="solution-6" class="section level4">
+<h4>Solution</h4>
 <pre class="r"><code>ppois(10, lambda = 3*5)</code></pre>
 <pre><code>## [1] 0.1184644</code></pre>
 </div>
