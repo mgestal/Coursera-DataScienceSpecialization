@@ -25,7 +25,7 @@ This specialization covers the concepts and tools you'll need throughout the ent
 
 1. [Statistical Inference](./06_Statistical.Inference)
 
-1. Regression Models
+1. [Regression Models](./07_RegressionModels/)
 
 1. Practical Machine Learning
 

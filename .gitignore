@@ -56,3 +56,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+04_ExploratoryDataAnalysis/CourseProject/P2/data/Source_Classification_Code.rds
+04_ExploratoryDataAnalysis/CourseProject/P2/data/summarySCC_PM25.rds
+04_ExploratoryDataAnalysis/CourseProject/P1/data/household_power_consumption.txt
+06_Statistical.Inference/Project/url.txt
