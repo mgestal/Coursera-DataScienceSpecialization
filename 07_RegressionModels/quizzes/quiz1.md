@@ -1,0 +1,248 @@
+# Regression Models: Quiz 1
+Marcos Gestal  
+
+
+---
+
+
+### Question 1
+
+Consider the data set given below
+
+
+```r
+x <- c(0.18, -1.54, 0.42, 0.95)
+```
+
+And weights given by
+
+
+```r
+w <- c(2, 1, 3, 1)
+```
+
+Give the value of $\mu$ that minimizes the least squares equation $\sum_{i=1}^{n}w_i(x_i-\mu)^2$
+
+
+#### Solution
+
+
+```r
+linearMod <- lm(w~x)
+
+min_nu <- sum(x*w) / sum(w)
+final <- sum(w*(x-min_nu)^2)
+
+c(min_nu, final)
+```
+
+```
+## [1] 0.1471429 3.7165429
+```
+
+We can check it replacing the values in the formula to see the ouput values:
+
+
+```r
+mu <- c(0.1471, 1.077, 0.3, 0.0025)
+
+for (i in 1:length(w)){
+  mse <- sum(w[i]*(x[i] - mu[i])^2)
+  print(c(mu[i], "==>", mse))
+}
+```
+
+```
+## [1] "0.1471"     "==>"        "0.00216482"
+## [1] "1.077"    "==>"      "6.848689"
+## [1] "0.3"    "==>"    "0.0432"
+## [1] "0.0025"     "==>"        "0.89775625"
+```
+
+The lowest value corresponds with $\mu=0.1471$
+
+### Question 2
+
+Consider the following data set
+
+
+```r
+x <- c(0.8, 0.47, 0.51, 0.73, 0.36, 0.58, 0.57, 0.85, 0.44, 0.42)
+y <- c(1.39, 0.72, 1.55, 0.48, 1.19, -1.59, 1.23, -0.65, 1.49, 0.05)
+```
+
+Fit the regression through the origin and get the slope treating y as the outcome and x as the regressor. (Hint, do not center the data since we want regression through the origin, not through the means of the data.)
+
+#### Solution
+
+
+```r
+linearMod <- lm(y ~ 0 + x)  # linear model with the intercepted term in the origin
+linearMod$coefficients[1]   # Get the slope
+```
+
+```
+##         x 
+## 0.8262517
+```
+
+### Question 3
+
+Do ```data(mtcars)``` from the datasets package and fit the regression model with mpg as the outcome and weight as the predictor. Give the slope coefficient.
+
+#### Solution
+
+
+```r
+data(mtcars)
+regModel <- lm(mtcars$mpg ~ mtcars$wt)
+regModel$coefficients[2]
+```
+
+```
+## mtcars$wt 
+## -5.344472
+```
+
+### Question 4
+
+Consider data with an outcome (Y) and a predictor (X). The standard deviation of the predictor is one half that of the outcome. The correlation between the two variables is .5. What value would the slope coefficient for the regression model with Y as the outcome and X as the predictor?
+
+#### Solution
+
+
+```r
+#rxy = .5
+#sx/sy = .5
+
+sx <- 1/2
+sy <- 1
+cor <- .5
+cor * sy / sx
+```
+
+```
+## [1] 1
+```
+
+### Question 5
+
+Students were given two hard tests and scores were normalized to have empirical mean 0 and variance 1. The correlation between the scores on the two tests was 0.4. What would be the expected score on Quiz 2 for a student who had a normalized score of 1.5 on Quiz 1?
+
+#### Solution
+
+
+```r
+quiz1 <- 1.5
+cor <- 0.4
+
+quiz2 <- cor * quiz1
+quiz2
+```
+
+```
+## [1] 0.6
+```
+
+
+### Question 6
+
+Consider the data given by the following
+
+
+```r
+x <- c(8.58, 10.46, 9.01, 9.64, 8.86)
+```
+
+What is the value of the first measurement if x were normalized (to have mean 0 and variance 1)?
+
+#### Solution 
+
+
+```r
+xnorm <- (x - mean(x)) / sd(x)
+xnorm
+```
+
+```
+## [1] -0.9718658  1.5310215 -0.3993969  0.4393366 -0.5990954
+```
+
+### Question 7
+
+Consider the following data set (used above as well). What is the intercept for fitting the model with x as the predictor and y as the outcome?
+
+
+```r
+x <- c(0.8, 0.47, 0.51, 0.73, 0.36, 0.58, 0.57, 0.85, 0.44, 0.42)
+y <- c(1.39, 0.72, 1.55, 0.48, 1.19, -1.59, 1.23, -0.65, 1.49, 0.05)
+```
+
+#### Solution 
+
+
+```r
+linearMod <- lm(y~x)
+linearMod$coefficients[1]
+```
+
+```
+## (Intercept) 
+##    1.567461
+```
+
+
+
+### Question 8
+
+You know that both the predictor and response have mean 0. What can be said about the intercept when you fit a linear regression?
+
+
+#### Solution 
+
+* It is undefined as you have to divide by zero.  
+* Nothing about the intercept can be said from the information given.
+* **It must be identically 0.**  
+* It must be exactly one.  
+
+### Question 9
+
+Consider the data given by
+
+
+```r
+x <- c(0.8, 0.47, 0.51, 0.73, 0.36, 0.58, 0.57, 0.85, 0.44, 0.42)
+```
+
+What value minimizes the sum of the squared distances between these points and itself?
+
+#### Solution 
+
+
+```r
+mu <- c(0.573, 0.8, 0.36, 0.44)
+
+for (i in 1:length(mu)){
+  mse <- sum((x - mu[i])^2)
+  print(c(mu[i], "==>", mse))
+}
+```
+
+```
+## [1] "0.573"   "==>"     "0.25401"
+## [1] "0.8"    "==>"    "0.7693"
+## [1] "0.36"   "==>"    "0.7077"
+## [1] "0.44"   "==>"    "0.4309"
+```
+
+### Question 10
+
+Let the slope having fit Y as the outcome and X as the predictor be denoted as $\beta_1$. Let the slope from fitting X as the outcome and Y as the predictor be denoted as ??1. Suppose that you divide $\beta_1$ by $\gamma_1$; in other words consider ${\beta_1}/{\gamma_1}$. What is this ratio always equal to?
+
+#### Solution 
+
+* **Var(Y)/Var(X)** 
+* 2SD(Y)/SD(X)			
+* 1			
+* Cor(Y,X)
+
