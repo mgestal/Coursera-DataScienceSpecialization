@@ -2,9 +2,9 @@
 title: 'Regression Models: Quiz 1'
 author: "Marcos Gestal"
 output:
+  pdf_document: default
   html_document:
     keep_md: yes
-  pdf_document: default
 ---
 
 
