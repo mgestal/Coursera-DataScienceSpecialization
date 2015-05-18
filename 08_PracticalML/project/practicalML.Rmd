@@ -1,0 +1,180 @@
+---
+title: "Practical ML : Course Project"
+author: "Marcos Gestal"
+date: "Friday, May 08, 2015"
+output: pdf_document
+---
+
+
+## Background
+
+Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement - a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. In this project, your goal will be to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways. More information is available from the website here: http://groupware.les.inf.puc-rio.br/har (see the section on the Weight Lifting Exercise Dataset). 
+
+
+## Goal
+
+The goal of your project is to predict the manner in which they did the exercise. This is the "classe" variable in the training set. You may use any of the other variables to predict with. You should create a report describing how you built your model, how you used cross validation, what you think the expected out of sample error is, and why you made the choices you did. You will also use your prediction model to predict 20 different test cases
+
+
+## Data 
+
+
+The training data for this project are available here: https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv
+
+The test data are available here: https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv
+
+The data for this project come from this source: http://groupware.les.inf.puc-rio.br/har. 
+
+
+### Load data and pre-process steps
+
+```{r echo=FALSE}
+
+setwd("C:/GitHub/Coursera-DataScienceSpecialization/08_PracticalML/project")
+
+# Download data
+trainData <- file.path(getwd(), "Data/pml-training.csv")
+testData <- file.path(getwd(), "Data/pml-testing.csv")
+
+  
+# We will extract data into "Data" directory, so we stablish it as rootDir
+rootDir <- file.path(getwd(), "Data")
+
+if (!file.exists(trainData)) {
+  trainDataURL <- "https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv"
+  testDataURL <- "https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv"
+  
+  download.file(trainDataURL, trainData)
+  download.file(testDataURL, testData)
+  downloadedTime <- Sys.time()
+}
+
+```
+
+```{r cache=TRUE}
+
+train <- read.csv(trainData, na.strings=c("NA", "#DIV/0!"))
+test <- read.csv(testData, na.strings=c("NA", "#DIV/0!"))
+
+# Pre-processing of datasets: clean features (columns) with all values of NAs in
+# the train dataset
+
+notNullFeatures <- colSums(is.na(train))==0
+
+train <- train[, notNullFeatures]
+test <- test[, notNullFeatures]
+
+irrelevantFeatures <- c("X", "user_name", "raw_timestamp_part_1", "raw_timestamp_part_2",
+                        "cvtd_timestamp", "new_window", "num_window")
+
+train <- train[, !names(train) %in% irrelevantFeatures]
+test <- test[, !names(test) %in% irrelevantFeatures]
+
+
+```
+
+The final dataset used for training phase cointains `r nrow(train)` patterns with `r ncol(train)` features each one. On the other hand the test dataset contains a total of `r nrow(test)` patterns with the *same* features.
+
+### Data overview
+
+The outcome variable for our work is labelled as ```classe```. It contains 5 different levels with the following distribution
+
+```{r}
+
+plot(train$classe,
+     main="Distribution of valid outputs for the train dataset",
+     xlab="classe variable", ylab="frequency")
+
+```
+
+As the graphics shows, class A is a little more present in the dataset, but there is not any class either over- or under- represented. Class A corresponds to the specified execution of the exercise, while the other 4 classes correspond to common mistakes.
+
+Read more: http://groupware.les.inf.puc-rio.br/har#weight_lifting_exercises
+
+
+### Partitioning the training set
+
+We split the original data set, with the 60% of that samples used for train phase and the 40% for the validation (random subsampling without replacement)
+
+```{r}
+
+library(caret)
+library(kernlab)
+library(rpart.plot)
+
+set.seed(12345)
+inTrain <- createDataPartition(train$classe, p = 0.6, list = FALSE)
+
+train <- train[inTrain, ]
+validation <- train[-inTrain, ]
+
+```
+
+### Artificial Neural Networks
+
+```{r cache=TRUE}
+
+library(nnet)
+system.time(modelNet <- nnet(classe ~ . , data = train, size=17, maxit=2000, 
+                             abstol=1e-6, preProc=c("center", "scale"), trace=FALSE))
+            
+predictionsNet <- predict(modelNet, newdata = validation, type="class")
+confusionMatrix(predictionsNet, validation$classe)
+
+```
+
+
+### Regression Trees
+
+```{r}
+
+system.time(modelTree <- rpart (classe ~ ., data=train, method="class"))
+
+predictionsTree <- predict(modelTree, newdata = validation, type="class")
+confusionMatrix(predictionsTree, validation$classe)
+
+rpart.plot(modelTree, main="Classification Tree for pml data")
+
+```
+
+### Random Forest
+
+```{r}
+
+library(randomForest)
+system.time(modelRF <- randomForest(classe ~ ., data=train, method="class"))
+
+predictionsRF <- predict(modelRF, newdata = validation, type="class")
+confusionMatrix(predictionsRF, validation$classe)
+
+```
+
+
+## Conclussions
+
+## What you should submit
+
+1. Your submission should consist of a link to a Github repo with your R markdown and compiled HTML file describing your analysis. Please constrain the text of the writeup to < 2000 words and the number of figures to be less than 5. 
+
+2. You should also apply your machine learning algorithm to the 20 test cases available in the test data above. 
+
+### Submission
+
+```{r}
+
+predictionsFinal <- predict(modelRF, newdata = test, type="class")
+predictionsFinal
+
+# Create individual files for the submissions of the predictions
+
+pml_write_files = function(x){
+  n = length(x)
+  for(i in 1:n){
+    filename = paste0("problem_id_",i,".txt")
+    write.table(x[i],file=filename,quote=FALSE,row.names=FALSE,col.names=FALSE)
+  }
+}
+
+pml_write_files(predictionsFinal)
+
+```
