@@ -1,36 +1,54 @@
 ---
-title: "Practical ML : Course Project"
+title: 'Practical ML : Course Project'
 author: "Marcos Gestal"
-date: "Friday, May 08, 2015"
+date: "Friday, May 19, 2015"
 output: pdf_document
 ---
+
+
+```{r library, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+
+library(caret)
+library(rpart.plot)
+library(kernlab)
+
+library(parallel)
+library(doParallel)
+
+library(nnet)
+library(rpart)
+library(randomForest)
+
+```
 
 
 ## Background
 
 Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement - a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. In this project, your goal will be to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways. More information is available from the website here: http://groupware.les.inf.puc-rio.br/har (see the section on the Weight Lifting Exercise Dataset). 
 
+See: Velloso, E.; Bulling, A.; Gellersen, H.; Ugulino, W.; Fuks, H. Qualitative Activity Recognition of Weight Lifting Exercises. Proceedings of 4th International Conference in Cooperation with SIGCHI (Augmented Human '13) . Stuttgart, Germany: ACM SIGCHI, 2013. [online](http://groupware.les.inf.puc-rio.br/har#wle_paper_section#ixzz3aU8hNz33)
+
 
 ## Goal
 
-The goal of your project is to predict the manner in which they did the exercise. This is the "classe" variable in the training set. You may use any of the other variables to predict with. You should create a report describing how you built your model, how you used cross validation, what you think the expected out of sample error is, and why you made the choices you did. You will also use your prediction model to predict 20 different test cases
+The goal of this project is to predict the manner in which users did the exercise. This is the ```classe``` variable in the training set. The other variables should predict it. The present report describes how the model was built, the cross validation validation, an explanation about the choices, and so on. 
 
+Finally, the prediction model is used to predict 20 different test cases
 
 ## Data 
-
 
 The training data for this project are available here: https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv
 
 The test data are available here: https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv
 
-The data for this project come from this source: http://groupware.les.inf.puc-rio.br/har. 
+The data for this project come from this source: http://http://groupware.les.inf.puc-rio.br/har#weight_lifting_exercises. 
 
 
 ### Load data and pre-process steps
 
-```{r echo=FALSE}
 
-setwd("C:/GitHub/Coursera-DataScienceSpecialization/08_PracticalML/project")
+
+```{r downloadData, echo=FALSE}
 
 # Download data
 trainData <- file.path(getwd(), "Data/pml-training.csv")
@@ -51,18 +69,29 @@ if (!file.exists(trainData)) {
 
 ```
 
-```{r cache=TRUE}
+```{r loadData, cache=TRUE}
 
-train <- read.csv(trainData, na.strings=c("NA", "#DIV/0!"))
-test <- read.csv(testData, na.strings=c("NA", "#DIV/0!"))
+trainData <- file.path(getwd(), "Data/pml-training.csv")
+testData <- file.path(getwd(), "Data/pml-testing.csv")
+
+originalTrain <- read.csv(trainData, na.strings=c("NA", "#DIV/0!"))
+originalTest <- read.csv(testData, na.strings=c("NA", "#DIV/0!"))
+
+```
+
+The original train dataset has `r nrow(originalTrain)` observations and the test dataset has `r nrow(originalTest)` observations. Both datasets have `r ncol(originalTrain)` features each one.
+
+The dataset is filtered to remove variables with all values missing and to discard the irrelevant variables (mainly the descriptive ones) from the train and test sets.
+
+
+```{r preprocess, cache=TRUE}
 
 # Pre-processing of datasets: clean features (columns) with all values of NAs in
 # the train dataset
+notNullFeatures <- colSums(is.na(originalTrain))==0
 
-notNullFeatures <- colSums(is.na(train))==0
-
-train <- train[, notNullFeatures]
-test <- test[, notNullFeatures]
+train <- originalTrain[, notNullFeatures]
+test <- originalTest[, notNullFeatures]
 
 irrelevantFeatures <- c("X", "user_name", "raw_timestamp_part_1", "raw_timestamp_part_2",
                         "cvtd_timestamp", "new_window", "num_window")
@@ -70,16 +99,23 @@ irrelevantFeatures <- c("X", "user_name", "raw_timestamp_part_1", "raw_timestamp
 train <- train[, !names(train) %in% irrelevantFeatures]
 test <- test[, !names(test) %in% irrelevantFeatures]
 
-
 ```
 
-The final dataset used for training phase cointains `r nrow(train)` patterns with `r ncol(train)` features each one. On the other hand the test dataset contains a total of `r nrow(test)` patterns with the *same* features.
+The final datasets used for the train and test phase have `r ncol(train)` features each one. Those features are the *same* in both datasets.
 
 ### Data overview
 
-The outcome variable for our work is labelled as ```classe```. It contains 5 different levels with the following distribution
+Data contains info about how the users perform the exercises. The classe variable is a factor with 5 levels about the way one user perform one set of 10 repetitions of the unilateral dumbbell biceps curl.
+. Class A : according to the specification
+. Class B : throwing the elbows to the front
+. Class C : lifting the dumbbell only halfway
+. Class D : lowering the dumbbell only halfway
+. Class E : throwing the hips to the front
 
-```{r}
+Figure 1 shows the distribution of the 5 different levels.
+
+
+```{r figureClasse, fig.cap="classe levels", fig.height=4}
 
 plot(train$classe,
      main="Distribution of valid outputs for the train dataset",
@@ -87,20 +123,16 @@ plot(train$classe,
 
 ```
 
-As the graphics shows, class A is a little more present in the dataset, but there is not any class either over- or under- represented. Class A corresponds to the specified execution of the exercise, while the other 4 classes correspond to common mistakes.
-
-Read more: http://groupware.les.inf.puc-rio.br/har#weight_lifting_exercises
+As the previous graphic shows, class A is a little more present in the dataset, but there is not any class either over- or under- represented. As we noted previously, Class A corresponds to the specified execution of the exercise, while the other 4 classes correspond to common mistakes.
 
 
 ### Partitioning the training set
 
-We split the original data set, with the 60% of that samples used for train phase and the 40% for the validation (random subsampling without replacement)
+In order to allow ***cross-validation***, We split the original data set, with the 60% of that samples used for train phase and the 40% for the validation (using a random subsampling without replacement approach). 
 
-```{r}
+The seed for the random number generation was set at 12345, so in order to reproduce the results below, the same value should be used in other studies.
 
-library(caret)
-library(kernlab)
-library(rpart.plot)
+```{r dataPartition}
 
 set.seed(12345)
 inTrain <- createDataPartition(train$classe, p = 0.6, list = FALSE)
@@ -110,23 +142,79 @@ validation <- train[-inTrain, ]
 
 ```
 
+
+## Predictions Models
+
+Several predictions models were tested: neural networks, regression trees and random forest. For each one, the confusion matrix shows the main statistic measures to check their performance.
+
+The performance of the models is checked using the cross validation set to check problems like overfitting.
+
+The confusionMatrix methods provides the Accuracy in the cross validation dataset, so we can calculate the ***expected out-of-sample error*** as 1-accuracy to check the percentage of missclassified observations. We will consider good models those that present an expected out-of-sample error below 1% (or 0.01)
+
+Two approaches for each selection are used. 
+
+First, the function *train* from library caret is also used to compare the results. This function can be used to:
+. evaluate, using resampling, the effect of model tuning parameters on performance
+. choose the "optimal" model across these parameters
+. estimate model performance from a training set
+
+![Train Algorithm](./TrainAlgorithm.png)
+
+Once the model and tuning parameter values have been defined, the type of resampling should be also be specified (k-fold cross-validation (once or repeated), leave-one-out cross-validation and bootstrap). After resampling, the process produces a profile of performance measures is available to guide the user as to which tuning parameter values should be chosen. By default, the function automatically chooses the tuning parameters associated with the best value.
+
+After that, a specific library implementation of the method is used and tested. This function receives a fixed set of parameters, so the performance related with computation time should be higher.
+
+A 10-fold Cross Validation was used as trainControl parameter. Furthermore, libraries *parallel* and *doParallel* were used to improve the time responses.
+
+```{r parallel, echo=FALSE,warning=FALSE}
+
+cluster <- makeCluster(detectCores() - 1)
+registerDoParallel(cluster)
+
+trControl <- trainControl(method="cv",
+                          allowParallel = TRUE)
+ 
+```
+
 ### Artificial Neural Networks
 
-```{r cache=TRUE}
+First, ANNs are used as model.
 
-library(nnet)
-system.time(modelNet <- nnet(classe ~ . , data = train, size=17, maxit=2000, 
-                             abstol=1e-6, preProc=c("center", "scale"), trace=FALSE))
+```{r ann, cache=TRUE}
+
+modelANN_caret <- train(classe ~ . , data=train, method="nnet", 
+                 trControl = trControl, verbose = FALSE, trace=FALSE)
+
+## Check accuracy over the validation dataset
+predictionsANN_caret <- predict(modelANN_caret, newdata = validation, type="raw")
+confusionMatrix(predictionsANN_caret, validation$classe)
+
+modelANN <- nnet(classe ~ . , data = train, size=17, maxit=2000, 
+                 abstol=1e-3, algorithm = "backprop",
+                 preProc=c("center", "scale"), trace=FALSE, verbose = FALSE)
             
-predictionsNet <- predict(modelNet, newdata = validation, type="class")
-confusionMatrix(predictionsNet, validation$classe)
+predictionsANN <- predict(modelANN, newdata = validation, type="class")
+confusionMatrix(predictionsANN, validation$classe)
 
 ```
+ANN model does not provide good results in the classification or at least as not good as we expected. More tests should be done, but the neither nnet nor caret packages provides a good/easy tuning of the parameters like number of hidden layers, number el Process Elements per layer, training algorithms...
+
+The required computation time is the greatest of the three methods probed.
 
 
 ### Regression Trees
 
-```{r}
+The second model test is based on Regression Trees (CART Algorithm)
+
+```{r regressionTrees, cache=TRUE}
+
+modelTree_caret <- train(classe ~ . , data=train, method="rpart2",
+                         preProc=c("center", "scale"),
+                         trControl = trControl)
+
+## Check accuracy over the validation dataset
+predictionsTree_caret <- predict(modelTree_caret, newdata = validation, type="raw")
+confusionMatrix(predictionsTree_caret, validation$classe)
 
 system.time(modelTree <- rpart (classe ~ ., data=train, method="class"))
 
@@ -137,30 +225,50 @@ rpart.plot(modelTree, main="Classification Tree for pml data")
 
 ```
 
+In this case, the specific library provides better results than caret CART implementation.
+
 ### Random Forest
 
-```{r}
+Finally, we test a randomForest approach using a specific library (randomForest) and the generic caret library that performs a more exhaustive (and slow) search with k-fold cross validation.
 
-library(randomForest)
-system.time(modelRF <- randomForest(classe ~ ., data=train, method="class"))
+```{r randomForest}
+
+modelRF_caret <- train(classe ~ . , data=train, method="rf", 
+                       preProcess = c("center", "scale"), 
+                       trControl = trainControl(method = "cv"))
+
+## Check accuracy over the validation dataset
+predictionsRF_caret <- predict(modelRF_caret, newdata = validation, type="raw")
+confusionMatrix(predictionsRF_caret, validation$classe)
+
+modelRF <- randomForest(classe ~ ., data=train, method="class")
 
 predictionsRF <- predict(modelRF, newdata = validation, type="class")
 confusionMatrix(predictionsRF, validation$classe)
 
 ```
 
+In both cases, we obtain an accuracy of 100% (out-of-sample error = 0%)
+
+
+```{r stopCluster, echo=FALSE}
+
+stopCluster(cluster)
+
+```
 
 ## Conclussions
 
-## What you should submit
+Once the tests were performed several conclussions can be drawn
 
-1. Your submission should consist of a link to a Github repo with your R markdown and compiled HTML file describing your analysis. Please constrain the text of the writeup to < 2000 words and the number of figures to be less than 5. 
-
-2. You should also apply your machine learning algorithm to the 20 test cases available in the test data above. 
+1. From the tested methods, randomForest achieves the best results (Expected out-of sample: 0%)
+2. The caret package provides an easy an common interface to test different classification/regression methods instead of using specific libraries (although the last ones provides detailed graphs and functions but specific to a subset of its implemented methods)
 
 ### Submission
 
-```{r}
+The code to generate the files with the predictions is the next (Predictions are genereted from the Random Forest method):
+
+```{r submission}
 
 predictionsFinal <- predict(modelRF, newdata = test, type="class")
 predictionsFinal
