@@ -2,9 +2,14 @@
 title: 'Practical ML : Course Project'
 author: "Marcos Gestal"
 date: "Friday, May 19, 2015"
-output: pdf_document
+output: html_document
 ---
 
+```{r global_options, include=FALSE}
+
+knitr::opts_chunk$set(fig.height=4, fig.path='Figs/',
+                      warning=FALSE, message=FALSE)
+```
 
 ```{r library, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 
@@ -41,7 +46,7 @@ The training data for this project are available here: https://d396qusza40orc.cl
 
 The test data are available here: https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv
 
-The data for this project come from this source: http://http://groupware.les.inf.puc-rio.br/har#weight_lifting_exercises. 
+The data for this project come from this source: http://groupware.les.inf.puc-rio.br/har#weight_lifting_exercises. 
 
 
 ### Load data and pre-process steps
@@ -166,12 +171,12 @@ After that, a specific library implementation of the method is used and tested. 
 
 A 10-fold Cross Validation was used as trainControl parameter. Furthermore, libraries *parallel* and *doParallel* were used to improve the time responses.
 
-```{r parallel, echo=FALSE,warning=FALSE}
+```{r parallel, error=FALSE, warning=FALSE}
 
 cluster <- makeCluster(detectCores() - 1)
 registerDoParallel(cluster)
 
-trControl <- trainControl(method="cv",
+trControl <- trainControl(method="cv", number=10,
                           allowParallel = TRUE)
  
 ```
@@ -231,7 +236,7 @@ In this case, the specific library provides better results than caret CART imple
 
 Finally, we test a randomForest approach using a specific library (randomForest) and the generic caret library that performs a more exhaustive (and slow) search with k-fold cross validation.
 
-```{r randomForest}
+```{r randomForest, cache=TRUE}
 
 modelRF_caret <- train(classe ~ . , data=train, method="rf", 
                        preProcess = c("center", "scale"), 
