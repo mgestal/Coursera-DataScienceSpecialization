@@ -1,0 +1,129 @@
+---
+title: "Quiz 2"
+author: "mgestal"
+date: "Thursday, May 28, 2015"
+output: pdf_document
+---
+
+### Question 1
+
+Load the Alzheimer's disease data using the commands:
+
+```
+library(AppliedPredictiveModeling)
+library(caret)
+data(AlzheimerDisease)
+```
+Which of the following commands will create training and test sets with about 50% of the observations assigned to each?
+
+### Solution
+
+```
+adData = data.frame(diagnosis,predictors)
+trainIndex = createDataPartition(diagnosis, p = 0.50,list=FALSE)
+training = adData[trainIndex,]
+testing = adData[-trainIndex,]
+```
+
+### Question 2
+
+Load the cement data using the commands:
+
+```{r warning=FALSE,message=FALSE}
+library(AppliedPredictiveModeling)
+data(concrete)
+library(caret)
+set.seed(975)
+inTrain = createDataPartition(mixtures$CompressiveStrength, p = 3/4)[[1]]
+training = mixtures[ inTrain,]
+testing = mixtures[-inTrain,]
+```
+
+Make a histogram and confirm the SuperPlasticizer variable is skewed. Normally you might use the log transform to try to make the data more symmetric. Why would that be a poor choice for this variable?
+
+
+### Solution
+
+```{r fig.height=4}
+ggplot(data=training, aes(x=Superplasticizer)) + geom_histogram() 
+```
+
+* **There are values of zero so when you take the log() transform those values will be -Inf.**
+
+
+### Question 3
+
+Load the Alzheimer's disease data using the commands:
+
+```{r warning=FALSE,message=FALSE}
+library(caret)
+library(AppliedPredictiveModeling)
+set.seed(3433)
+data(AlzheimerDisease)
+adData = data.frame(diagnosis,predictors)
+inTrain = createDataPartition(adData$diagnosis, p = 3/4)[[1]]
+training = adData[ inTrain,]
+testing = adData[-inTrain,]
+```
+
+Find all the predictor variables in the training set that begin with IL. Perform principal components on these variables with the preProcess() function from the caret package. Calculate the number of principal components needed to capture 90% of the variance. How many are there?
+
+### Solution
+
+```{r}
+IL_cols <- grep("^IL", colnames(training), value="TRUE")
+preProc <- preProcess(training[, IL_cols], method="pca", thresh=0.9)
+preProc$rotation
+ncol(preProc$rotation)
+```
+
+### Question 4
+
+Load the Alzheimer's disease data using the commands:
+
+```{r}
+library(caret)
+library(AppliedPredictiveModeling)
+set.seed(3433)
+data(AlzheimerDisease)
+adData = data.frame(diagnosis,predictors)
+inTrain = createDataPartition(adData$diagnosis, p = 3/4)[[1]]
+training = adData[ inTrain,]
+testing = adData[-inTrain,]
+```
+
+Create a training data set consisting of only the predictors with variable names beginning with IL and the diagnosis. Build two predictive models, one using the predictors as they are and one using PCA with principal components explaining 80% of the variance in the predictors. Use method="glm" in the train function. What is the accuracy of each method in the test set? Which is more accurate?
+
+### Solution
+
+First model: GLM
+Second model: GLM with PCA preProc
+
+```{r}
+IL_cols <- grep("^IL", colnames(training), value="TRUE")
+
+training <- training[, c('diagnosis', IL_cols)]
+testing <- testing[, c('diagnosis', IL_cols)]
+
+# GLM with IL_* predictors
+
+modelGLM <- train(diagnosis ~ ., method="glm", data=training)
+
+predictionsGLM <- predict(modelGLM, newdata=testing)
+confusionMatrix(predictionsGLM, testing$diagnosis)
+# Non-PCA Accuracy 
+confusionMatrix(predictionsGLM, testing$diagnosis)$overall[1]
+
+
+# GLM with PCA to explain the 80% variance of the predictors
+
+modelGLM_PCA <- train(diagnosis ~ ., method="glm", data=training,
+                      preProcess = "pca",
+                      trControl = trainControl(preProcOptions = list(thresh = 0.8)))
+
+predictionsGLM_PCA <- predict(modelGLM_PCA, newdata=testing)
+confusionMatrix(predictionsGLM_PCA, testing$diagnosis)
+# PCA Accuracy
+confusionMatrix(predictionsGLM_PCA, testing$diagnosis)$overall[1]
+
+```
