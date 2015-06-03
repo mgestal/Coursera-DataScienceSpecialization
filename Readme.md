@@ -29,7 +29,7 @@ This specialization covers the concepts and tools you'll need throughout the ent
 
 1. [Practical Machine Learning](./08_PracticalML)
 
-1. Developing Data Products
+1. [Developing Data Products](.09_DevelopingDataProducts)
 
 1. Data Science Capstone
 
