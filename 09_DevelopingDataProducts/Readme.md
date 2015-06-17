@@ -26,4 +26,9 @@ In this class students will learn a variety of core tools for creating data prod
 1. Students creating and deploying their projects
 1. Creating R packages, classes and methods, yhat.
 
+
+GH-Pages url for project:
+
+http://mgestal.github.io/Coursera-DataScienceSpecialization/09_DevelopingDataProducts/index.html
+
 (C) Marcos Gestal. June, 2015. All Rights reserved.
