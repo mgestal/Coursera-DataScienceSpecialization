@@ -1,0 +1,11 @@
+---
+title: "Developing Data Products: course project"
+author: "Marcos Gestal"
+date: "Tuesday, June 16, 2015"
+output: html_document
+---
+
+
+### ShinyApp link
+
+https://mgestal.shinyapps.io/project

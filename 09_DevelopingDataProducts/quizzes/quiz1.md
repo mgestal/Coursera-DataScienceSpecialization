@@ -33,7 +33,7 @@ This function plots distance versus speed, each de-meaned and an associated line
 
 ### Question 2
 
-Which of the following code uses the rCharts package to create a sortable and searchable data table for the airquality data set? Assume the rCharts package and the airquality data set have already been loaded into R.
+Which of the following code uses the ```rCharts``` package to create a sortable and searchable data table for the ```airquality``` data set? Assume the ```rCharts``` package and the ```airquality``` data set have already been loaded into R.
 
 * dTable(airquality, sPaginationType = "full_numbers")
 * d <- data.frame(airquality, stringsAsFactors = FALSE) print(d)
@@ -49,15 +49,15 @@ Which of the following code uses the rCharts package to create a sortable and se
 
 A basic shiny data product requires:
 
-* A server.R file only.
-* A ui.R file only.
-* A shiny.R file.
-* A ui.R and server.R file or a A server.R file and a directory called www containing the relevant html files.
+* A ```server.R``` file only.
+* A ```ui.R``` file only.
+* A ```shiny.R``` file.
+* A ```ui.R``` and ```server.R``` file or a A server.R file and a directory called www containing the relevant html files.
 
 
 ### Answer
 
-* **A ui.R and server.R file or a A server.R file and a directory called www containing the relevant html files.**
+* **A ```ui.R``` and ```server.R``` file or a A server.R file and a directory called www containing the relevant html files.**
 
 
 ###  Question 4
@@ -78,10 +78,10 @@ shinyUI(pageWithSidebar(
 ))
 ```
 
-* The h2 command has the wrong arguments.
+* The ```h2``` command has the wrong arguments.
 * Missing a comma in the sidebar panel
-* The h3 command should be an h2 command.
-* The "Sidebar" should say "Sidebar text".
+* The ```h3``` command should be an ```h2``` command.
+* The ```"Sidebar"``` should say ```"Sidebar text"```.
 
 ### Answer
 
@@ -91,7 +91,7 @@ shinyUI(pageWithSidebar(
 
 ### Question 5
 
-Consider the following code in ui.R
+Consider the following code in ```ui.R```
 
 ```
 shinyUI(pageWithSidebar(
@@ -105,7 +105,7 @@ shinyUI(pageWithSidebar(
 ))
 ```
 
-And the following server.R code.
+And the following ```server.R``` code.
 
 ```
 library(UsingR)
