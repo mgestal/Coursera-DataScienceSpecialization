@@ -1,0 +1,96 @@
+---
+output: pdf_document
+---
+# Developoing Data Products: Quiz 3
+Marcos Gestal  
+
+
+---
+
+
+### Question 1
+
+Which of the following items is required for an R package to pass R CMD check without any warnings or errors?
+
+* unit tests
+* example data sets
+* ***DESCRIPTION file***
+* a demo directory
+
+### Solution
+
+* ***DESCRIPTION file***
+
+
+### Question 2
+
+Which of the following is a generic function in a fresh installation of R, with only the default packages loaded?
+
+* colSums
+* dgamma
+* ***mean***
+* lm
+
+### Solution
+
+```{r warning=FALSE}
+
+library(pryr)
+
+ftype(colSums)
+ftype(dgamma)
+ftype(mean)
+ftype(lm)
+
+```
+* ***mean***
+
+### Question 3
+
+What function is used to obtain the function body for an S4 method function?
+
+* ***getMethod()***
+* showMethods()
+* getS3method()
+* getClass()
+
+
+### Answer
+
+* ***getMethod()***
+
+
+###  Question 4
+
+Which one of the following functions must be defined in order to deploy an R function on yhat?
+
+* model.require
+* model.load
+* ***model.predict***
+* model.transform
+
+### Answer
+
+* ***model.predict***  
+
+
+
+### Question 5
+
+Please download the R package [DDPQuiz3](https://d396qusza40orc.cloudfront.net/devdataprod/DDPQuiz3_1.0.zip) from the course web site. Examine the createmean function implemented in the R/ sub-directory. What is the appropriate text to place above the createmean function for Roxygen2 to create a complete help file?
+
+
+### Solution
+
+```
+
+#' This function calculates the mean
+#' 
+#' @param x is a numeric vector
+#' @return the mean of x
+#' @export
+#' @examples 
+#' x <- 1:10
+#' createmean(x)
+
+```
